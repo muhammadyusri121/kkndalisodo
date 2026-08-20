@@ -9,6 +9,48 @@ import { getHeroSlides } from "@/server/services/heroService";
 import { getVideoList } from "@/server/services/videoService";
 import { getBannerList } from "@/server/services/bannerService";
 import Link from "next/link";
+import JsonLd from "@/components/seo/JsonLd";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_DEFAULT_TITLE,
+  SITE_DEFAULT_DESCRIPTION,
+  TARGET_KEYWORDS,
+  generateBreadcrumbSchema,
+} from "@/lib/seo";
+import type { Metadata } from "next";
+
+// Meta data SEO Halaman Beranda
+export const metadata: Metadata = {
+  title: "Website Resmi & Portal Wisata Desa Dalisodo Wagir Malang",
+  description: SITE_DEFAULT_DESCRIPTION,
+  keywords: TARGET_KEYWORDS,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: SITE_DEFAULT_TITLE,
+    description: SITE_DEFAULT_DESCRIPTION,
+    images: [
+      {
+        url: "/assets/image/Logo_Kabupaten_Malang.svg",
+        width: 800,
+        height: 600,
+        alt: "Portal Resmi Desa Dalisodo - Wagir, Malang",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_DEFAULT_TITLE,
+    description: SITE_DEFAULT_DESCRIPTION,
+    images: ["/assets/image/Logo_Kabupaten_Malang.svg"],
+  },
+};
 
 /**
  * Halaman Utama (HomePage / Beranda)
@@ -30,6 +72,8 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-6 sm:space-y-16 pb-6 sm:pb-12">
+      {/* Schema Breadcrumb untuk Google Search */}
+      <JsonLd data={generateBreadcrumbSchema([{ name: "Beranda", url: "/" }])} />
       {/* Seksi 1: Banner Slider Utama (Hero Section) */}
       <HeroSection initialSlides={heroSlides} />
 

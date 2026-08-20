@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ProfilDesa } from "@/types/profil";
 import GambaranUmumSection from "./sections/GambaranUmumSection";
 import GeografiSection from "./sections/GeografiSection";
@@ -15,16 +15,6 @@ interface ProfilSectionProps {
   data: ProfilDesa;
 }
 
-const NAVIGATION_TABS = [
-  { id: "gambaran-umum", label: "GAMBARAN UMUM" },
-  { id: "geografi", label: "GEOGRAFI & BATAS" },
-  { id: "dusun", label: "7 DUSUN" },
-  { id: "pemerintahan", label: "PEMERINTAHAN" },
-  { id: "demografi", label: "DEMOGRAFI" },
-  { id: "fasilitas", label: "SARANA & PRASARANA" },
-  { id: "ekonomi", label: "EKONOMI" },
-  { id: "sosbud", label: "SOSIAL & BUDAYA" },
-];
 
 /**
  * Komponen ProfilSection
@@ -38,6 +28,17 @@ const NAVIGATION_TABS = [
  */
 export default function ProfilSection({ data }: ProfilSectionProps) {
   const [activeSection, setActiveSection] = useState<string>("gambaran-umum");
+
+  const NAVIGATION_TABS = useMemo(() => [
+    { id: "gambaran-umum", label: "GAMBARAN UMUM" },
+    { id: "geografi", label: "GEOGRAFI & BATAS" },
+    { id: "dusun", label: "DUSUN" },
+    { id: "pemerintahan", label: "PEMERINTAHAN" },
+    { id: "demografi", label: "DEMOGRAFI" },
+    { id: "fasilitas", label: "SARANA & PRASARANA" },
+    { id: "ekonomi", label: "EKONOMI" },
+    { id: "sosbud", label: "SOSIAL & BUDAYA" },
+  ], []);
 
   // Pelacak posisi gulir (ScrollSpy) menggunakan IntersectionObserver
   useEffect(() => {
@@ -61,7 +62,7 @@ export default function ProfilSection({ data }: ProfilSectionProps) {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [NAVIGATION_TABS]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -109,7 +110,7 @@ export default function ProfilSection({ data }: ProfilSectionProps) {
         {/* 2. Geografi & Batas Wilayah */}
         <GeografiSection data={data} />
 
-        {/* 3. 7 Wilayah Dusun */}
+        {/* 3. Wilayah Dusun */}
         <DusunSection data={data} />
 
         {/* 4. Pemerintahan Desa & Bagan Organisasi */}

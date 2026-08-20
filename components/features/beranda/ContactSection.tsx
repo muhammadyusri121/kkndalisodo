@@ -40,7 +40,12 @@ export default function ContactSection() {
           
           {/* Alamat Balai Desa */}
           <div className="flex items-start gap-4 pb-5 border-b border-marble group hover:translate-x-1.5 transition-transform duration-300 cursor-default">
-            <span className="text-xl text-giallo shrink-0 pt-0.5" aria-hidden="true">📍</span>
+            <div className="w-10 h-10 rounded-lg bg-giallo/10 text-giallo-dark flex items-center justify-center border border-giallo/20 shrink-0 group-hover:bg-giallo group-hover:text-pure-black transition-colors shadow-2xs">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" />
+                <circle cx="12" cy="9" r="2.5" />
+              </svg>
+            </div>
             <div className="space-y-1">
               <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-carbony tracking-[0.023em] group-hover:text-giallo-dark transition-colors">
                 ALAMAT BALAI DESA
@@ -53,7 +58,11 @@ export default function ContactSection() {
 
           {/* Telepon & Hotline */}
           <div className="flex items-start gap-4 pb-5 border-b border-marble group hover:translate-x-1.5 transition-transform duration-300 cursor-default">
-            <span className="text-xl text-giallo shrink-0 pt-0.5" aria-hidden="true">📞</span>
+            <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-dalisodo flex items-center justify-center border border-emerald-200/80 shrink-0 group-hover:bg-emerald-dalisodo group-hover:text-white transition-colors shadow-2xs">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92Z" />
+              </svg>
+            </div>
             <div className="space-y-1">
               <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-carbony tracking-[0.023em] group-hover:text-giallo-dark transition-colors">
                 TELEPON / HOTLINE
@@ -69,7 +78,12 @@ export default function ContactSection() {
 
           {/* Email Resmi */}
           <div className="flex items-start gap-4 pb-5 border-b border-marble group hover:translate-x-1.5 transition-transform duration-300 cursor-default">
-            <span className="text-xl text-giallo shrink-0 pt-0.5" aria-hidden="true">✉️</span>
+            <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center border border-teal-200/80 shrink-0 group-hover:bg-teal-700 group-hover:text-white transition-colors shadow-2xs">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="M22 6L12 13L2 6" />
+              </svg>
+            </div>
             <div className="space-y-1">
               <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-carbony tracking-[0.023em] group-hover:text-giallo-dark transition-colors">
                 EMAIL RESMI
@@ -85,7 +99,12 @@ export default function ContactSection() {
 
           {/* Jam Operasional */}
           <div className="flex items-start gap-4 pt-1 group hover:translate-x-1.5 transition-transform duration-300 cursor-default">
-            <span className="text-xl text-giallo shrink-0 pt-0.5" aria-hidden="true">🕒</span>
+            <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-900 flex items-center justify-center border border-amber-200/80 shrink-0 group-hover:bg-giallo group-hover:text-pure-black transition-colors shadow-2xs">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6V12L16 14" />
+              </svg>
+            </div>
             <div className="space-y-1">
               <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-carbony tracking-[0.023em] group-hover:text-giallo-dark transition-colors">
                 JAM PELAYANAN BALAI DESA
@@ -102,7 +121,7 @@ export default function ContactSection() {
         </address>
 
         {/* Kolom Peta Google Maps Embed */}
-        <div className="lg:col-span-7 min-h-[380px] lg:min-h-[460px] rounded-lg overflow-hidden bg-carbony relative border border-ash/20 shadow-sm hover:shadow-xl hover:border-giallo/50 transition-all duration-500">
+        <div className="lg:col-span-7 min-h-95 lg:min-h-115 rounded-lg overflow-hidden bg-carbony relative border border-ash/20 shadow-sm hover:shadow-xl hover:border-giallo/50 transition-all duration-500">
           <iframe
             id="kontak-map-iframe"
             title="Peta Lokasi Desa Dalisodo Wagir Malang"

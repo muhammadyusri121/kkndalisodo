@@ -159,21 +159,32 @@ export default async function Footer() {
             <h3 className="font-lambo text-xs font-bold uppercase tracking-[0.15em] text-giallo border-b border-anvil pb-2">
               KONTAK & LOKASI DESA
             </h3>
-            <div className="space-y-2 font-lambo text-xs text-slate-300 uppercase tracking-[0.023em]">
-              <p className="flex items-center gap-2">
-                <span className="text-giallo" aria-hidden="true">📍</span>
+            <div className="space-y-2.5 font-lambo text-xs text-slate-300 uppercase tracking-[0.023em]">
+              <p className="flex items-center gap-2.5">
+                <svg className="w-4 h-4 text-giallo shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" />
+                  <circle cx="12" cy="9" r="2.5" />
+                </svg>
                 <span>JL. RAYA DALISODO NO. 123, WAGIR MALANG</span>
               </p>
-              <p className="flex items-center gap-2">
-                <span className="text-giallo" aria-hidden="true">📞</span>
-                <span>+62 812-3456-7890</span>
+              <p className="flex items-center gap-2.5">
+                <svg className="w-4 h-4 text-giallo shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92Z" />
+                </svg>
+                <a href="tel:+6281234567890" className="hover:text-giallo transition-colors">+62 812-3456-7890</a>
               </p>
-              <p className="flex items-center gap-2">
-                <span className="text-giallo" aria-hidden="true">✉️</span>
-                <span className="lowercase">kkn10dalisodo2026@gmail.com</span>
+              <p className="flex items-center gap-2.5">
+                <svg className="w-4 h-4 text-giallo shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="2" y="4" width="20" height="16" rx="2" />
+                  <path d="M22 6L12 13L2 6" />
+                </svg>
+                <a href="mailto:layanan@dalisodo.desa.id" className="lowercase hover:text-giallo transition-colors">layanan@dalisodo.desa.id</a>
               </p>
-              <p className="flex items-center gap-2 pt-1 text-giallo-dark font-semibold">
-                <span className="text-giallo" aria-hidden="true">🕒</span>
+              <p className="flex items-center gap-2.5 pt-1 text-giallo-dark font-semibold">
+                <svg className="w-4 h-4 text-giallo shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6V12L16 14" />
+                </svg>
                 <span>SENIN - JUMAT (08:00 - 15:30 WIB)</span>
               </p>
             </div>

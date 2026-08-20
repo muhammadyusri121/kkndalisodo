@@ -1,3 +1,5 @@
+import { dusunData } from "./dusunData";
+
 export const gambaranUmumData = {
   namaDesa: "Dalisodo",
   kecamatan: "Wagir",
@@ -6,7 +8,7 @@ export const gambaranUmumData = {
   semboyan: "Madep Manteb Manetep",
   kodePos: "65158",
   ketinggian: "± 715 mdpl (Lereng Timur Gunung Kawi)",
-  jumlahDusunCount: 7,
+  jumlahDusunCount: dusunData.length,
   luasWilayah: "± 14.5 km²",
   jumlahPenduduk: "6.451 Jiwa",
 

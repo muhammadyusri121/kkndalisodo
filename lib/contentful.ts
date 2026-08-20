@@ -40,6 +40,22 @@ export async function fetchContentful<T>(query: string, variables = {}): Promise
 
     const { data, errors } = await res.json();
     if (errors) {
+      // Cek apakah semua error adalah UNRESOLVABLE_LINK (aset belum dipublish di Contentful)
+      // Jenis error ini tidak fatal — data lainnya masih valid dan bisa ditampilkan
+      const isAllUnresolvable = errors.every(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (e: any) => e?.extensions?.contentful?.code === "UNRESOLVABLE_LINK"
+      );
+
+      if (isAllUnresolvable && data) {
+        // Hanya tampilkan warning, jangan buang data yang valid
+        console.warn(
+          `Contentful: ${errors.length} UNRESOLVABLE_LINK (aset belum dipublish). Data lain tetap ditampilkan.`
+        );
+        return data as T;
+      }
+
+      // Error lain yang benar-benar fatal
       console.error("Contentful GraphQL Errors:", JSON.stringify(errors, null, 2));
       return null;
     }

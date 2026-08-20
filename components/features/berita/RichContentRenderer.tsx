@@ -95,30 +95,51 @@ function renderRichNode(node: any, index: number): React.ReactNode {
       );
     case "blockquote":
       return <blockquote key={index}>{renderNodeContent(node.content)}</blockquote>;
-    case "embedded-asset-block":
-      const assetUrl = node.data?.target?.fields?.file?.url;
-      const assetTitle = node.data?.target?.fields?.title || "Gambar Berita";
-      if (assetUrl) {
+    case "embedded-asset-block": {
+      const assetFile = node.data?.target?.fields?.file;
+      const assetUrl = assetFile?.url;
+      const assetTitle = node.data?.target?.fields?.title || "";
+      const contentType: string = assetFile?.contentType || "";
+
+      if (!assetUrl) return null;
+
+      const resolvedUrl = assetUrl.startsWith("//") ? `https:${assetUrl}` : assetUrl;
+
+      // Render video — tetap full-width agar kontrol mudah dioperasikan
+      if (contentType.startsWith("video/")) {
         return (
-          <figure key={index} className="my-8 w-full">
-            <div className="relative w-full overflow-hidden rounded-xl shadow-md border border-gray-100 bg-carbony">
-              <Image
-                src={assetUrl.startsWith("//") ? `https:${assetUrl}` : assetUrl}
-                alt={assetTitle}
-                width={1200}
-                height={675}
-                sizes="(max-width: 1200px) 100vw, 1200px"
-                style={{ width: "100%", height: "auto" }}
-                className="rounded-xl object-cover"
-              />
-            </div>
-            {assetTitle && assetTitle !== "Gambar Berita" && (
-              <figcaption className="mt-2.5 text-center text-xs text-slate-500 font-sans">{assetTitle}</figcaption>
-            )}
+          <figure key={index} className="my-6 w-full">
+            <video
+              src={resolvedUrl}
+              controls
+              playsInline
+              className="w-full rounded-xl"
+              style={{ maxHeight: "560px" }}
+            >
+              <source src={resolvedUrl} type={contentType} />
+              Browser Anda tidak mendukung pemutaran video.
+            </video>
           </figure>
         );
       }
-      return null;
+
+      // Render gambar:
+      // - Mobile  : lebar mengikuti ukuran alami gambar (tidak dipaksakan penuh)
+      // - Desktop : dibatasi max 560px dan di-tengah agar tidak terlalu lebar
+      return (
+        <figure key={index} className="my-6 flex justify-center">
+          <Image
+            src={resolvedUrl}
+            alt={assetTitle || "Gambar Berita"}
+            width={1200}
+            height={675}
+            sizes="(max-width: 640px) 100vw, 560px"
+            style={{ width: "100%", height: "auto", maxWidth: "560px" }}
+            className="rounded-xl"
+          />
+        </figure>
+      );
+    }
     case "table":
       return (
         <div key={index} className="not-prose w-full my-3 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xs">
@@ -161,6 +182,25 @@ function renderRichNode(node: any, index: number): React.ReactNode {
       );
     case "hr":
       return <hr key={index} />;
+    case "embedded-entry-block": {
+      // Fallback: tampilkan judul entry sebagai blockquote jika ada
+      const entryFields = node.data?.target?.fields;
+      const entryTitle =
+        entryFields?.judul ||
+        entryFields?.title ||
+        entryFields?.name ||
+        entryFields?.nama ||
+        null;
+      if (!entryTitle) return null;
+      return (
+        <blockquote
+          key={index}
+          className="my-6 pl-4 border-l-4 border-emerald-dalisodo/50 bg-slate-50 rounded-r-xl py-3 pr-4 italic text-slate-600 font-sans text-sm"
+        >
+          {entryTitle}
+        </blockquote>
+      );
+    }
     default:
       if (node.content) {
         return <div key={index}>{renderNodeContent(node.content)}</div>;
@@ -239,6 +279,65 @@ function renderNodeContent(content: any[]): React.ReactNode {
         >
           {renderNodeContent(child.content)}
         </a>
+      );
+    } else if (child.nodeType === "asset-hyperlink") {
+      // Tautan ke aset Contentful (gambar/file yang bisa diunduh)
+      const assetFile = child.data?.target?.fields?.file;
+      const assetHref = assetFile?.url
+        ? assetFile.url.startsWith("//")
+          ? `https:${assetFile.url}`
+          : assetFile.url
+        : null;
+      const assetLinkTitle =
+        child.data?.target?.fields?.title ||
+        assetFile?.fileName ||
+        "Unduh Aset";
+      if (!assetHref) return null;
+      return (
+        <a
+          key={i}
+          href={assetHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          download
+        >
+          {child.content && child.content.length > 0
+            ? renderNodeContent(child.content)
+            : assetLinkTitle}
+        </a>
+      );
+    } else if (child.nodeType === "entry-hyperlink") {
+      // Tautan ke entry Contentful lainnya
+      const entryFields = child.data?.target?.fields;
+      const entrySlug =
+        entryFields?.slug ||
+        child.data?.target?.sys?.id ||
+        null;
+      const entryHref = entrySlug ? `/${entrySlug}` : "#";
+      return (
+        <a key={i} href={entryHref}>
+          {child.content && child.content.length > 0
+            ? renderNodeContent(child.content)
+            : entryFields?.judul || entryFields?.title || "Baca selengkapnya"}
+        </a>
+      );
+    } else if (child.nodeType === "embedded-entry-inline") {
+      // Entry inline — tampilkan judulnya sebagai badge kecil
+      const inlineFields = child.data?.target?.fields;
+      const inlineTitle =
+        inlineFields?.judul ||
+        inlineFields?.title ||
+        inlineFields?.name ||
+        inlineFields?.nama ||
+        null;
+      if (!inlineTitle) return null;
+      return (
+        <span
+          key={i}
+          className="inline-block bg-emerald-dalisodo/10 text-emerald-dalisodo text-xs font-semibold px-2 py-0.5 rounded mx-0.5 align-middle font-sans"
+        >
+          {inlineTitle}
+        </span>
       );
     } else if (child.nodeType === "paragraph") {
       return <span key={i} className="inline">{renderNodeContent(child.content)}</span>;

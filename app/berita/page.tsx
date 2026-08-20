@@ -2,11 +2,56 @@ import Link from "next/link";
 import BeritaCard from "@/components/features/berita/BeritaCard";
 import { getBeritaList } from "@/server/services/beritaService";
 
-// Meta data halaman katalog berita kegiatan (SEO)
-export const metadata = {
-  title: "Berita & Kegiatan | Desa Dalisodo",
+import JsonLd from "@/components/seo/JsonLd";
+import {
+  SITE_URL,
+  SITE_NAME,
+  generateBreadcrumbSchema,
+} from "@/lib/seo";
+import type { Metadata } from "next";
+
+// Meta data halaman katalog berita kegiatan (SEO Google & Social Sharing)
+export const metadata: Metadata = {
+  title: "Berita & Dokumentasi Kegiatan Desa Dalisodo",
   description:
-    "Kumpulan artikel berita terkini, dokumentasi kegiatan masyarakat, dan laporan program KKN 10 Desa Dalisodo.",
+    "Kumpulan berita terkini, publikasi kegiatan warga, pengumuman desa, dan dokumentasi program pengabdian masyarakat KKN 10 Desa Dalisodo, Kecamatan Wagir, Kabupaten Malang.",
+  keywords: [
+    "Berita Desa Dalisodo",
+    "Kegiatan Desa Dalisodo",
+    "Kabar Dalisodo Wagir",
+    "KKN 10 Dalisodo",
+    "Dokumentasi Desa Dalisodo",
+    "Pengumuman Desa Dalisodo",
+    "Info Malang Terkini",
+    "Pemerintah Desa Dalisodo Wagir",
+  ],
+  alternates: {
+    canonical: "/berita",
+  },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: `${SITE_URL}/berita`,
+    siteName: SITE_NAME,
+    title: "Berita & Dokumentasi Kegiatan Desa Dalisodo",
+    description:
+      "Informasi terbaru kegiatan masyarakat, program desa, dan publikasi KKN 10 Desa Dalisodo, Wagir, Malang.",
+    images: [
+      {
+        url: "/assets/image/Logo_Kabupaten_Malang.svg",
+        width: 800,
+        height: 600,
+        alt: "Berita & Kegiatan Desa Dalisodo - Wagir, Malang",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Berita & Dokumentasi Kegiatan Desa Dalisodo",
+    description:
+      "Kumpulan artikel berita terkini dan dokumentasi program Desa Dalisodo, Wagir, Malang.",
+    images: ["/assets/image/Logo_Kabupaten_Malang.svg"],
+  },
 };
 
 /**
@@ -22,6 +67,22 @@ export default async function BeritaPage() {
 
   return (
     <main id="berita-main-page" className="w-full bg-white min-h-screen">
+      {/* Schema Breadcrumb & CollectionPage untuk Google Search */}
+      <JsonLd
+        data={[
+          generateBreadcrumbSchema([
+            { name: "Beranda", url: "/" },
+            { name: "Berita Kegiatan", url: "/berita" },
+          ]),
+          {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "Berita & Dokumentasi Kegiatan Desa Dalisodo",
+            description: "Kumpulan artikel berita terkini dan dokumentasi program Desa Dalisodo, Wagir, Malang.",
+            url: `${SITE_URL}/berita`,
+          },
+        ]}
+      />
       {/* Banner Header Halaman (Dark Hero Stage) */}
       <header
         id="berita-header-banner"

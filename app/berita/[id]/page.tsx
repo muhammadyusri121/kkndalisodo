@@ -4,6 +4,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import JsonLd from "@/components/seo/JsonLd";
+import {
+  SITE_URL,
+  SITE_NAME,
+  generateBreadcrumbSchema,
+  generateNewsArticleSchema,
+} from "@/lib/seo";
+import type { Metadata } from "next";
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -12,16 +21,60 @@ interface PageProps {
  * Menghasilkan metadata SEO dinamis untuk halaman detail berita.
  *
  * @param {PageProps} props - Parameter rute berisi ID berita.
- * @returns {Promise<Metadata>} Objek metadata judul dan deskripsi.
+ * @returns {Promise<Metadata>} Objek metadata judul, deskripsi, OpenGraph, dan Twitter Card.
  */
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const item = await getBeritaById(id);
-  if (!item) return { title: "Berita Tidak Ditemukan | Desa Dalisodo" };
+  if (!item) {
+    return {
+      title: "Berita Tidak Ditemukan",
+      description: "Halaman berita atau dokumentasi kegiatan yang dicari tidak ditemukan di portal Desa Dalisodo.",
+    };
+  }
+
+  const pageUrl = `${SITE_URL}/berita/${id}`;
+  const coverImage = item.coverUrl || `${SITE_URL}/assets/image/Logo_Kabupaten_Malang.svg`;
 
   return {
-    title: `${item.judul} | Berita Desa Dalisodo`,
-    description: item.ringkasan,
+    title: item.judul,
+    description: item.ringkasan || `Baca selengkapnya mengenai ${item.judul} di portal resmi Desa Dalisodo, Wagir, Malang.`,
+    keywords: [
+      item.judul,
+      "Berita Desa Dalisodo",
+      "Kegiatan Desa Dalisodo",
+      "Dalisodo Wagir Malang",
+      item.kategori || "Berita & Kegiatan",
+      "KKN 10 Dalisodo",
+    ],
+    alternates: {
+      canonical: `/berita/${id}`,
+    },
+    openGraph: {
+      type: "article",
+      locale: "id_ID",
+      url: pageUrl,
+      siteName: SITE_NAME,
+      title: item.judul,
+      description: item.ringkasan,
+      publishedTime: item.tanggalwaktu,
+      authors: [item.penulis || "Pemerintah Desa Dalisodo & Tim KKN 10"],
+      section: item.kategori || "Berita & Kegiatan",
+      images: [
+        {
+          url: coverImage,
+          width: 1200,
+          height: 630,
+          alt: item.judul,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: item.judul,
+      description: item.ringkasan,
+      images: [coverImage],
+    },
   };
 }
 
@@ -45,6 +98,24 @@ export default async function DetailBeritaPage({ params }: PageProps) {
 
   return (
     <main id={`berita-detail-${item.id}`} className="w-full bg-marble min-h-screen pb-20">
+      {/* Schema Structured Data: NewsArticle & BreadcrumbList untuk Google */}
+      <JsonLd
+        data={[
+          generateBreadcrumbSchema([
+            { name: "Beranda", url: "/" },
+            { name: "Berita", url: "/berita" },
+            { name: item.judul, url: `/berita/${item.id}` },
+          ]),
+          generateNewsArticleSchema({
+            title: item.judul,
+            description: item.ringkasan,
+            url: `/berita/${item.id}`,
+            imageUrl: item.coverUrl,
+            publishedAt: item.tanggalwaktu,
+            authorName: item.penulis || "Pemerintah Desa Dalisodo & Tim KKN 10",
+          }),
+        ]}
+      />
       {/* Header Banner Utama (Dark Stage) */}
       <header className="w-full bg-carbon-deep text-white pt-24 sm:pt-32 pb-12 sm:pb-16 px-6 sm:px-12 lg:px-16 border-b border-anvil relative overflow-hidden">
         {/* Ornamen Pencahayaan Latar Belakang */}

@@ -2,11 +2,58 @@ import Link from "next/link";
 import WisataCard from "@/components/features/wisata/WisataCard";
 import { getWisataList } from "@/server/services/wisataService";
 
-// Meta data halaman katalog wisata desa (SEO)
-export const metadata = {
-  title: "Wisata Desa Dalisodo | Pesona Alam Lereng Kawi",
+import JsonLd from "@/components/seo/JsonLd";
+import {
+  SITE_URL,
+  SITE_NAME,
+  generateBreadcrumbSchema,
+} from "@/lib/seo";
+import type { Metadata } from "next";
+
+// Meta data halaman katalog wisata desa (SEO Google & Social Sharing)
+export const metadata: Metadata = {
+  title: "Destinasi Wisata & Potensi Alam Desa Dalisodo Lereng Kawi",
   description:
-    "Daftar tempat wisata alam, air terjun, hutan pinus, dan potensi agrowisata Desa Dalisodo, Kecamatan Wagir, Kabupaten Malang.",
+    "Jelajahi keindahan destinasi wisata alam Desa Dalisodo, Kecamatan Wagir, Kabupaten Malang. Temukan pesona pegunungan Putri Tidur lereng Gunung Kawi, air terjun alami, hutan pinus, agrowisata, dan spot foto terbaik.",
+  keywords: [
+    "Wisata Desa Dalisodo",
+    "Wisata Alam Wagir Malang",
+    "Pegunungan Putri Tidur",
+    "Wisata Lereng Gunung Kawi",
+    "Agrowisata Dalisodo",
+    "Air Terjun Dalisodo",
+    "Hutan Pinus Dalisodo",
+    "Desa Wisata Kabupaten Malang",
+    "Wisata Alam Malang Murah",
+    "Spot Foto Dalisodo",
+  ],
+  alternates: {
+    canonical: "/wisata",
+  },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: `${SITE_URL}/wisata`,
+    siteName: SITE_NAME,
+    title: "Destinasi Wisata & Potensi Alam Desa Dalisodo Lereng Kawi",
+    description:
+      "Daftar destinasi wisata alam, pegunungan lereng Kawi, dan potensi agrowisata Desa Dalisodo, Wagir, Malang.",
+    images: [
+      {
+        url: "/assets/image/Logo_Kabupaten_Malang.svg",
+        width: 800,
+        height: 600,
+        alt: "Wisata Alam Desa Dalisodo - Wagir, Malang",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Destinasi Wisata & Potensi Alam Desa Dalisodo Lereng Kawi",
+    description:
+      "Daftar tempat wisata alam dan potensi agrowisata Desa Dalisodo, Wagir, Malang.",
+    images: ["/assets/image/Logo_Kabupaten_Malang.svg"],
+  },
 };
 
 /**
@@ -22,6 +69,22 @@ export default async function WisataPage() {
 
   return (
     <main id="wisata-main-page" className="w-full bg-white min-h-screen">
+      {/* Schema Breadcrumb & CollectionPage untuk Google Search */}
+      <JsonLd
+        data={[
+          generateBreadcrumbSchema([
+            { name: "Beranda", url: "/" },
+            { name: "Wisata Desa", url: "/wisata" },
+          ]),
+          {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "Destinasi Wisata & Potensi Alam Desa Dalisodo",
+            description: "Daftar tempat wisata alam, pegunungan lereng Kawi, dan potensi agrowisata Desa Dalisodo, Wagir, Malang.",
+            url: `${SITE_URL}/wisata`,
+          },
+        ]}
+      />
       {/* Banner Header Halaman (Dark Hero Stage) */}
       <header
         id="wisata-header-banner"

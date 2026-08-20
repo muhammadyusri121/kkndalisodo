@@ -26,7 +26,7 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
   // Jika hanya ada 1 gambar, tampilkan gambar tunggal tanpa kontrol slider
   if (images.length === 1) {
     return (
-      <div className="w-full h-80 sm:h-96 md:h-[450px] relative rounded-lg overflow-hidden bg-carbony shadow-md border border-anvil">
+      <div className="w-full h-80 sm:h-96 md:h-112.5 relative rounded-lg overflow-hidden bg-carbony shadow-md border border-anvil">
         <Image
           src={images[0]}
           alt={judul}
@@ -64,7 +64,7 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
   };
 
   return (
-    <div className="relative group overflow-hidden w-full h-80 sm:h-96 md:h-[450px] bg-carbony rounded-lg border border-anvil shadow-md">
+    <div className="relative group overflow-hidden w-full h-80 sm:h-96 md:h-112.5 bg-carbony rounded-lg border border-anvil shadow-md">
       {/* Kontainer Rel Slider Foto */}
       <div
         onTransitionEnd={handleTransitionEnd}
@@ -102,14 +102,12 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
           viewBox="0 0 24 24"
           strokeWidth={2.5}
           stroke="currentColor"
+          strokeLinecap="square"
+          strokeLinejoin="miter"
           className="w-5 h-5"
           aria-hidden="true"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15.75 19.5L8.25 12l7.5-7.5"
-          />
+          <path d="M15 19l-7-7 7-7" />
         </svg>
       </button>
 
@@ -125,14 +123,12 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
           viewBox="0 0 24 24"
           strokeWidth={2.5}
           stroke="currentColor"
+          strokeLinecap="square"
+          strokeLinejoin="miter"
           className="w-5 h-5"
           aria-hidden="true"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M8.25 4.5l7.5 7.5-7.5 7.5"
-          />
+          <path d="M9 5l7 7-7 7" />
         </svg>
       </button>
 

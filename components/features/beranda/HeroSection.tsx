@@ -110,8 +110,9 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-giallo/5 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 space-y-5">
           <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-2xl backdrop-blur-md">
-            <svg className="w-8 h-8 text-giallo" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg className="w-8 h-8 text-giallo" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M8 15c1.5-2 5-2 6.5 0M9 10h.01M15 10h.01" />
             </svg>
           </div>
           <h2 className="font-lambo text-xl sm:text-2xl font-bold uppercase tracking-wider text-white">

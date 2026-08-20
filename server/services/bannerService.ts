@@ -16,7 +16,7 @@ interface RawBannerItem {
 export async function getBannerList(): Promise<BannerItem[]> {
   const query = `
     query GetBannerList {
-      bannerCollection(order: sys_publishedAt_DESC) {
+      bannerCollection(order: sys_publishedAt_DESC, where: { media_exists: true }) {
         items {
           sys { id }
           judul

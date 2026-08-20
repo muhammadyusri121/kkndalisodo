@@ -7,5 +7,7 @@ export const dusunData: DusunInfo[] = [
   { no: 4, nama: "Dusun Sengon Selatan", keterangan: "Kawasan permukiman dan peternakan warga." },
   { no: 5, nama: "Dusun Precet", keterangan: "Lokasi dibentuknya Kampung Keluarga Berencana (Kampung KB)." },
   { no: 6, nama: "Dusun Bedali", keterangan: "Kawasan perbukitan lereng Kawi (area perhatian mitigasi longsor)." },
-  { no: 7, nama: "Dusun Sempukerep", keterangan: "Kawasan pertanian & perkebunan warga." }
+  { no: 7, nama: "Dusun Sempukerep", keterangan: "Kawasan pertanian & perkebunan warga." },
+  { no: 8, nama: "Dusun Jengglong", keterangan: "Kawasan pertanian" },
+  { no: 9, nama: "Dusun Daliledok", keterangan: "Kawasan permukiman warga" }
 ];

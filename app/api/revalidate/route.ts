@@ -2,17 +2,21 @@ import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const secret = request.nextUrl.searchParams.get("secret");
+  const querySecret = request.nextUrl.searchParams.get("secret");
+  const authHeader = request.headers.get("authorization")?.replace("Bearer ", "");
+  const customHeader = request.headers.get("x-revalidate-secret");
 
-  if (secret !== process.env.REVALIDATE_SECRET) {
+  const providedSecret = querySecret || authHeader || customHeader;
+
+  if (!process.env.REVALIDATE_SECRET || providedSecret !== process.env.REVALIDATE_SECRET) {
     return NextResponse.json({ message: "Invalid secret token" }, { status: 401 });
   }
 
   try {
-    // Revalidate paths for wisata, berita, and home page
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     revalidatePath("/wisata");
     revalidatePath("/berita");
+    revalidatePath("/profil");
 
     return NextResponse.json({ revalidated: true, now: Date.now() });
   } catch {

@@ -6,6 +6,15 @@ import Link from "next/link";
 import Image from "next/image";
 import ImageSlider from "@/components/features/wisata/ImageSlider";
 
+import JsonLd from "@/components/seo/JsonLd";
+import {
+  SITE_URL,
+  SITE_NAME,
+  generateBreadcrumbSchema,
+  generateTouristAttractionSchema,
+} from "@/lib/seo";
+import type { Metadata } from "next";
+
 type Props = {
   params: Promise<{ slug: string }>;
 };
@@ -14,16 +23,57 @@ type Props = {
  * Menghasilkan metadata SEO dinamis untuk halaman detail destinasi wisata.
  *
  * @param {Props} props - Parameter rute berisi slug wisata.
- * @returns {Promise<Metadata>} Objek metadata judul dan deskripsi.
+ * @returns {Promise<Metadata>} Objek metadata judul, deskripsi, OpenGraph, dan Twitter Card.
  */
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const wisata = await getWisataBySlug(slug);
-  if (!wisata) return { title: "Wisata Tidak Ditemukan | Desa Dalisodo" };
+  if (!wisata) {
+    return {
+      title: "Wisata Tidak Ditemukan",
+      description: "Halaman destinasi wisata yang dicari tidak ditemukan di portal Desa Dalisodo.",
+    };
+  }
+
+  const pageUrl = `${SITE_URL}/wisata/${wisata.slug || slug}`;
+  const metaImage = wisata.thumbnailUrl || `${SITE_URL}/assets/image/Logo_Kabupaten_Malang.svg`;
 
   return {
-    title: `${wisata.judul} | Wisata Desa Dalisodo`,
-    description: `Informasi dan keindahan ${wisata.judul} di Desa Dalisodo, Kecamatan Wagir, Kabupaten Malang.`,
+    title: `${wisata.judul} | Wisata Alam Desa Dalisodo`,
+    description: `Jelajahi keindahan dan informasi lengkap destinasi wisata ${wisata.judul} di lereng Gunung Kawi, Desa Dalisodo, Kecamatan Wagir, Kabupaten Malang.`,
+    keywords: [
+      wisata.judul,
+      "Wisata Desa Dalisodo",
+      "Wisata Alam Wagir Malang",
+      "Destinasi Lereng Gunung Kawi",
+      "Wisata Dalisodo Malang",
+      ...(wisata.kategori || ["Wisata Alam"]),
+    ],
+    alternates: {
+      canonical: `/wisata/${wisata.slug || slug}`,
+    },
+    openGraph: {
+      type: "website",
+      locale: "id_ID",
+      url: pageUrl,
+      siteName: SITE_NAME,
+      title: `${wisata.judul} | Wisata Alam Desa Dalisodo`,
+      description: `Informasi dan keindahan ${wisata.judul} di lereng Gunung Kawi, Desa Dalisodo, Wagir, Malang.`,
+      images: [
+        {
+          url: metaImage,
+          width: 1200,
+          height: 630,
+          alt: wisata.judul,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${wisata.judul} | Wisata Alam Desa Dalisodo`,
+      description: `Informasi dan keindahan ${wisata.judul} di lereng Gunung Kawi, Desa Dalisodo, Wagir, Malang.`,
+      images: [metaImage],
+    },
   };
 }
 
@@ -52,6 +102,22 @@ export default async function WisataDetailPage({ params }: Props) {
 
   return (
     <main id={`wisata-detail-${wisata.id}`} className="w-full bg-marble min-h-screen pb-20">
+      {/* Schema Structured Data: TouristAttraction & BreadcrumbList untuk Google Search */}
+      <JsonLd
+        data={[
+          generateBreadcrumbSchema([
+            { name: "Beranda", url: "/" },
+            { name: "Wisata Desa", url: "/wisata" },
+            { name: wisata.judul, url: `/wisata/${wisata.slug || wisata.id}` },
+          ]),
+          generateTouristAttractionSchema({
+            title: wisata.judul,
+            url: `/wisata/${wisata.slug || wisata.id}`,
+            imageUrl: wisata.thumbnailUrl,
+            category: wisata.kategori,
+          }),
+        ]}
+      />
       {/* Header Banner Utama (Dark Stage) */}
       <header className="w-full bg-carbon-deep text-white pt-24 sm:pt-32 pb-12 sm:pb-16 px-6 sm:px-12 lg:px-16 border-b border-anvil relative overflow-hidden">
         {/* Ornamen Pencahayaan Latar Belakang */}

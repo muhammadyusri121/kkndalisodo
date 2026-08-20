@@ -10,21 +10,21 @@ import { HeroSlideItem } from "@/types/hero";
 export async function getHeroSlides(): Promise<HeroSlideItem[]> {
   const query = `
     query GetHeroData {
-      bannerCollection(limit: 2, order: sys_publishedAt_DESC) {
+      bannerCollection(limit: 2, order: sys_publishedAt_DESC, where: { media_exists: true }) {
         items {
           sys { id }
           judul
           media { url }
         }
       }
-      postinganCollection(limit: 2, order: sys_publishedAt_DESC) {
+      postinganCollection(limit: 2, order: sys_publishedAt_DESC, where: { cover_exists: true }) {
         items {
           sys { id }
           judul
           cover { url }
         }
       }
-      wisataCollection(limit: 2) {
+      wisataCollection(limit: 2, where: { thumbnail_exists: true }) {
         items {
           sys { id }
           judul

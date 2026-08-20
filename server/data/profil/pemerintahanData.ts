@@ -14,5 +14,7 @@ export const pemerintahanData: PerangkatDesa[] = [
   { id: "11", nama: "Kepala Dusun Sengon Selatan", jabatan: "Kepala Dusun Sengon Selatan" },
   { id: "12", nama: "Kepala Dusun Precet", jabatan: "Kepala Dusun Precet" },
   { id: "13", nama: "Kepala Dusun Bedali", jabatan: "Kepala Dusun Bedali" },
-  { id: "14", nama: "Kepala Dusun Sempukerep", jabatan: "Kepala Dusun Sempukerep" }
+  { id: "14", nama: "Kepala Dusun Sempukerep", jabatan: "Kepala Dusun Sempukerep" },
+  { id: "15", nama: "Kepala Dusun Jengglong", jabatan: "Kepala Dusun Jengglong" },
+  { id: "16", nama: "Kepala Dusun Daliledok", jabatan: "Kepala Dusun Daliledok" }
 ];

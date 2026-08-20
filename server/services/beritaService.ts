@@ -74,13 +74,96 @@ export function createRingkasan(isi: any, maxLength = 140): string {
   return fullText.substring(0, maxLength).trim() + "...";
 }
 
+interface RawAssetBlock {
+  sys: { id: string };
+  url?: string;
+  title?: string;
+  contentType?: string;
+  width?: number;
+  height?: number;
+}
+
+interface RawIsiLinks {
+  assets?: {
+    block?: RawAssetBlock[];
+    hyperlink?: RawAssetBlock[];
+  };
+}
+
+interface RawIsiField {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  json?: any;
+  links?: { assets?: RawIsiLinks["assets"] };
+}
+
 interface RawContentfulPost {
   sys: { id: string; publishedAt?: string; firstPublishedAt?: string };
   judul?: string;
   cover?: { url?: string; title?: string; description?: string };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  isi?: any;
+  isi?: RawIsiField | string;
   tanggalwaktu?: string;
+}
+
+/**
+ * Menyisipkan data aset (foto/video) ke dalam node-node rich text yang
+ * merujuk ke aset tersebut melalui sys.id.
+ * Tanpa langkah ini, node `embedded-asset-block` tidak memiliki
+ * `target.fields` sehingga gambar/video tidak akan tampil.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function resolveRichTextAssets(isiJson: any, assetBlocks: RawAssetBlock[]): any {
+  if (!isiJson || !Array.isArray(assetBlocks) || assetBlocks.length === 0) return isiJson;
+
+  // Buat map id → asset agar pencarian O(1)
+  const assetMap = new Map<string, RawAssetBlock>();
+  for (const asset of assetBlocks) {
+    if (asset?.sys?.id) assetMap.set(asset.sys.id, asset);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function walkNode(node: any): any {
+    if (!node) return node;
+
+    if (
+      node.nodeType === "embedded-asset-block" ||
+      node.nodeType === "asset-hyperlink"
+    ) {
+      const refId = node.data?.target?.sys?.id;
+      if (refId && assetMap.has(refId)) {
+        const asset = assetMap.get(refId)!;
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            target: {
+              ...node.data?.target,
+              fields: {
+                title: asset.title || "",
+                file: {
+                  url: asset.url || "",
+                  contentType: asset.contentType || "",
+                  details: {
+                    image: {
+                      width: asset.width,
+                      height: asset.height,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        };
+      }
+    }
+
+    if (Array.isArray(node.content)) {
+      return { ...node, content: node.content.map(walkNode) };
+    }
+
+    return node;
+  }
+
+  return walkNode(isiJson);
 }
 
 /**
@@ -90,7 +173,7 @@ interface RawContentfulPost {
  */
 export async function getBeritaList(): Promise<BeritaItem[]> {
   const query = `query GetPostinganList {
-    postinganCollection {
+    postinganCollection(order: sys_publishedAt_DESC) {
       items {
         sys { id publishedAt firstPublishedAt }
         judul
@@ -110,15 +193,51 @@ export async function getBeritaList(): Promise<BeritaItem[]> {
 }
 
 /**
- * Mengambil satu berita berdasarkan ID unik.
+ * Mengambil satu berita beserta aset rich text (foto/video inline) berdasarkan ID.
+ * Menggunakan query terpisah dengan `links` agar embedded-asset bisa di-resolve.
  *
  * @param {string} id - ID berita.
  * @returns {Promise<BeritaItem | null>} Objek berita atau null jika tidak ditemukan.
  */
 export async function getBeritaById(id: string): Promise<BeritaItem | null> {
+  const query = `query GetPostinganById($id: String!) {
+    postingan(id: $id) {
+      sys { id publishedAt firstPublishedAt }
+      judul
+      cover { url title description }
+      isi {
+        json
+        links {
+          assets {
+            block {
+              sys { id }
+              url
+              title
+              contentType
+              width
+              height
+            }
+            hyperlink {
+              sys { id }
+              url
+              title
+              contentType
+            }
+          }
+        }
+      }
+    }
+  }`;
+
+  const data = await fetchContentful<{ postingan?: RawContentfulPost }>(query, { id });
+
+  if (data?.postingan) {
+    return parseRawPostToBeritaItem(data.postingan);
+  }
+
+  // Fallback: cari dari daftar (tanpa embedded assets)
   const allPosts = await getBeritaList();
-  const found = allPosts.find((p) => p.id === id);
-  return found || null;
+  return allPosts.find((p) => p.id === id) || null;
 }
 
 /**
@@ -139,17 +258,28 @@ export async function getOtherBeritaList(excludeId: string, limit = 4): Promise<
 function parseRawPostToBeritaItem(item: RawContentfulPost): BeritaItem {
   const rawCoverUrl = item.cover?.url;
   const coverUrl = rawCoverUrl ? optimizeContentfulAsset(rawCoverUrl, 800) : "";
-  const rawIsi = item.isi || "";
   const rawTanggal = item.tanggalwaktu || item.sys.firstPublishedAt || item.sys.publishedAt || new Date().toISOString();
+
+  // Resolve embedded assets dari links ke dalam JSON rich text
+  const isiRaw = item.isi as RawIsiField | string | undefined;
+  let isiResolved: RawIsiField | string | undefined = isiRaw;
+  if (isiRaw && typeof isiRaw === "object") {
+    const assetBlocks: RawAssetBlock[] = [
+      ...(isiRaw.links?.assets?.block || []),
+      ...(isiRaw.links?.assets?.hyperlink || []),
+    ];
+    const resolvedJson = resolveRichTextAssets(isiRaw.json || isiRaw, assetBlocks);
+    isiResolved = isiRaw.json ? { ...isiRaw, json: resolvedJson } : resolvedJson;
+  }
 
   return {
     id: item.sys.id,
     judul: item.judul || "Tanpa Judul",
     coverUrl,
     cover: item.cover,
-    isi: rawIsi,
+    isi: isiResolved,
     tanggalwaktu: rawTanggal,
-    ringkasan: createRingkasan(rawIsi),
+    ringkasan: createRingkasan(isiRaw),
     kategori: "Berita & Kegiatan",
     penulis: "Admin Desa",
   };

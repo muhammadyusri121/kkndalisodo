@@ -52,13 +52,10 @@ export default function DokumentasiSection({ items = [] }: DokumentasiSectionPro
           className="relative z-10 w-full min-h-60 rounded-2xl bg-white/60 border border-ash/20 flex flex-col items-center justify-center text-center p-8 space-y-3 select-none"
         >
           <div className="w-14 h-14 rounded-2xl bg-white border border-ash/30 flex items-center justify-center text-emerald-dalisodo shadow-xs">
-            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="1" />
+              <path d="M3 15l5-5 4 4 3-3 6 5" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
             </svg>
           </div>
           <h3 className="font-lambo text-base sm:text-lg font-bold uppercase tracking-[0.023em] text-carbony">
@@ -99,13 +96,9 @@ export default function DokumentasiSection({ items = [] }: DokumentasiSectionPro
 
               {/* Tombol Perbesar Hover */}
               <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/50 backdrop-blur-xs text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"
-                  />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="10" cy="10" r="6" />
+                  <path d="M14 14l5 5M10 7v6M7 10h6" />
                 </svg>
               </div>
             </div>
