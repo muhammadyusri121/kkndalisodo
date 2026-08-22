@@ -62,11 +62,17 @@ export default function WisataCard({ item }: { item: WisataItem }) {
         />
         
         {/* Lencana Kategori Wisata */}
-        {item.kategori && item.kategori.length > 0 && (
-          <span className="absolute top-3 left-3 bg-carbon-deep/80 backdrop-blur-md text-giallo font-sans text-[11px] font-semibold tracking-wide px-3 py-1 rounded-full border border-white/10 shadow-sm">
-            {item.kategori.join(" • ")}
-          </span>
-        )}
+        {(() => {
+          const displayKategori = item.kategori?.filter(
+            (kat) => kat.toLowerCase().trim() !== "wisata alam"
+          );
+          if (!displayKategori || displayKategori.length === 0) return null;
+          return (
+            <span className="absolute top-3 left-3 bg-carbon-deep/80 backdrop-blur-md text-giallo font-sans text-[11px] font-semibold tracking-wide px-3 py-1 rounded-full border border-white/10 shadow-sm">
+              {displayKategori.join(" • ")}
+            </span>
+          );
+        })()}
       </Link>
 
       {/* Detail Konten Wisata */}

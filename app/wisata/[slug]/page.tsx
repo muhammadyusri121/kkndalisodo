@@ -135,18 +135,24 @@ export default async function WisataDetailPage({ params }: Props) {
           </Link>
 
           {/* Lencana Kategori Wisata */}
-          {wisata.kategori && wisata.kategori.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-1.5">
-              {wisata.kategori.map((kat, idx) => (
-                <span
-                  key={idx}
-                  className="bg-emerald-dalisodo/20 backdrop-blur-sm text-giallo font-lambo text-xs font-bold uppercase tracking-[0.12em] px-3.5 py-1.5 rounded-md border border-giallo/30 shadow-[0_0_15px_rgba(255,192,0,0.05)] cursor-default"
-                >
-                  {kat}
-                </span>
-              ))}
-            </div>
-          )}
+          {(() => {
+            const displayKategori = wisata.kategori?.filter(
+              (kat) => kat.toLowerCase().trim() !== "wisata alam"
+            );
+            if (!displayKategori || displayKategori.length === 0) return null;
+            return (
+              <div className="flex flex-wrap gap-2 pt-1.5">
+                {displayKategori.map((kat, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-emerald-dalisodo/20 backdrop-blur-sm text-giallo font-lambo text-xs font-bold uppercase tracking-[0.12em] px-3.5 py-1.5 rounded-md border border-giallo/30 shadow-[0_0_15px_rgba(255,192,0,0.05)] cursor-default"
+                  >
+                    {kat}
+                  </span>
+                ))}
+              </div>
+            );
+          })()}
 
           {/* Judul Utama Destinasi Wisata */}
           <h1 className="font-lambo text-xl sm:text-2xl md:text-3xl lg:text-3.5xl xl:text-4xl font-bold uppercase tracking-[0.02em] text-white leading-tight w-full max-w-none drop-shadow-md">
@@ -171,7 +177,7 @@ export default async function WisataDetailPage({ params }: Props) {
             <h2 className="font-lambo text-xl sm:text-2xl font-bold uppercase text-carbony tracking-[0.023em] flex items-center gap-2">
               <span>TENTANG DESTINASI</span>
             </h2>
-            <div className="prose prose-slate max-w-none prose-img:rounded-xl prose-headings:font-lambo prose-headings:uppercase prose-a:text-emerald-dalisodo font-sans text-base sm:text-lg text-slate-700 leading-relaxed space-y-4">
+            <div className="prose prose-slate max-w-none prose-figure:w-full prose-figure:max-w-none prose-img:w-full prose-img:rounded-2xl prose-headings:font-lambo prose-headings:uppercase prose-a:text-emerald-dalisodo font-sans text-base sm:text-lg text-slate-700 leading-relaxed space-y-4">
               <RichContentRenderer content={wisata.deskripsi} />
             </div>
           </div>
@@ -182,7 +188,7 @@ export default async function WisataDetailPage({ params }: Props) {
               <h2 className="font-lambo text-xl sm:text-2xl font-bold uppercase text-carbony tracking-[0.023em] flex items-center gap-2">
                 <span>INFORMASI & KETERANGAN DESTINASI</span>
               </h2>
-              <div>
+              <div className="prose prose-slate max-w-none prose-figure:w-full prose-figure:max-w-none prose-img:w-full prose-img:rounded-2xl prose-headings:font-lambo prose-headings:uppercase prose-a:text-emerald-dalisodo font-sans text-base sm:text-lg text-slate-700 leading-relaxed space-y-4">
                 <RichContentRenderer content={wisata.detailInformasi} />
               </div>
             </div>

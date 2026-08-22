@@ -23,17 +23,14 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
 
   if (!images || images.length === 0) return null;
 
-  // Jika hanya ada 1 gambar, tampilkan gambar tunggal tanpa kontrol slider
+  // Jika hanya ada 1 gambar, tampilkan gambar dengan potongan tipis tepi 2-3%
   if (images.length === 1) {
     return (
-      <div className="w-full h-80 sm:h-96 md:h-112.5 relative rounded-lg overflow-hidden bg-carbony shadow-md border border-anvil">
-        <Image
+      <div className="w-full relative overflow-hidden rounded-2xl bg-carbony/5 shadow-md border border-ash/20">
+        <img
           src={images[0]}
           alt={judul}
-          fill
-          priority
-          sizes="(max-width: 1200px) 100vw, 1200px"
-          className="object-cover"
+          className="w-full h-auto max-h-[800px] object-cover rounded-2xl block mx-auto scale-[1.02] sm:scale-[1.03] origin-center transition-transform duration-500"
         />
       </div>
     );
@@ -64,7 +61,7 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
   };
 
   return (
-    <div className="relative group overflow-hidden w-full h-80 sm:h-96 md:h-112.5 bg-carbony rounded-lg border border-anvil shadow-md">
+    <div className="relative group overflow-hidden w-full h-[360px] sm:h-[520px] md:h-[640px] bg-carbony/10 rounded-2xl border border-ash/20 shadow-md">
       {/* Kontainer Rel Slider Foto */}
       <div
         onTransitionEnd={handleTransitionEnd}
@@ -77,14 +74,14 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
         }}
       >
         {extendedImages.map((imgUrl, idx) => (
-          <div key={idx} className="w-full shrink-0 h-full relative">
+          <div key={idx} className="w-full shrink-0 h-full relative flex items-center justify-center bg-carbony/10 overflow-hidden">
             <Image
               src={imgUrl}
               alt={`${judul} - Foto ${idx}`}
               fill
               priority={idx === 1}
               sizes="(max-width: 1200px) 100vw, 1200px"
-              className="object-cover select-none pointer-events-none"
+              className="object-cover scale-[1.02] sm:scale-[1.03] origin-center select-none pointer-events-none transition-transform duration-500"
             />
           </div>
         ))}

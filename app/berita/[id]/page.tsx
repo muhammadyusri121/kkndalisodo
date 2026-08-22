@@ -164,23 +164,20 @@ export default async function DetailBeritaPage({ params }: PageProps) {
       {/* Kontainer Isi Artikel Berita */}
       <div className="max-w-7xl mx-auto pt-8 sm:pt-12 px-6 sm:px-12 lg:px-16 space-y-12 sm:space-y-16">
         
-        {/* Gambar Sampul Berita */}
+        {/* Gambar Sampul Berita (Potongan Tipis Tepi 2-3%) */}
         {item.coverUrl && (
-          <div className="relative w-full aspect-21/9 max-h-125 rounded-xl overflow-hidden bg-carbony border border-ash/20 shadow-md">
-            <Image
+          <div className="relative w-full overflow-hidden rounded-2xl bg-carbony/5 border border-ash/20 shadow-md">
+            <img
               src={item.coverUrl}
               alt={item.cover?.title || item.judul}
-              fill
-              priority
-              sizes="(max-width: 1300px) 100vw, 1240px"
-              className="object-cover object-center filter brightness-[0.95]"
+              className="w-full h-auto max-h-[800px] object-cover rounded-2xl block mx-auto scale-[1.02] sm:scale-[1.03] origin-center transition-transform duration-500"
             />
           </div>
         )}
 
         {/* Kartu Konten Utama Artikel */}
         <article className="bg-white rounded-xl border border-ash/20 p-6 sm:p-10 lg:p-14 shadow-sm space-y-8">
-          <div className="prose prose-slate max-w-none prose-img:rounded-xl prose-headings:font-lambo prose-headings:uppercase prose-headings:text-carbony prose-a:text-emerald-dalisodo prose-p:text-slate-700 prose-p:leading-relaxed font-sans text-base sm:text-lg text-anvil leading-relaxed space-y-4">
+          <div className="prose prose-slate max-w-none prose-figure:w-full prose-figure:max-w-none prose-img:w-full prose-img:rounded-2xl prose-headings:font-lambo prose-headings:uppercase prose-headings:text-carbony prose-a:text-emerald-dalisodo prose-p:text-slate-700 prose-p:leading-relaxed font-sans text-base sm:text-lg text-anvil leading-relaxed space-y-4">
             <RichContentRenderer content={item.isi} />
           </div>
 

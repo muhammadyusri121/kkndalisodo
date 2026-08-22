@@ -122,7 +122,7 @@ function parseRawWisataItem(item: RawWisataItem): WisataItem {
     id: item.sys.id,
     slug: slug || item.sys.id,
     judul: judulText,
-    kategori: ["Wisata Alam"],
+    kategori: [],
     deskripsi: resolveField(item.deskripsi),
     detailInformasi: resolveField(item.detailInformasi),
     thumbnailUrl: optimizeContentfulAsset(item.thumbnail?.url, 800) || "",

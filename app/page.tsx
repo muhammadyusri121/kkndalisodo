@@ -108,12 +108,20 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {/* Grid Kartu Berita (Maksimal 4 Item Terbaru) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 pt-5 sm:pt-10">
-          {beritaList.slice(0, 4).map((item) => (
-            <BeritaCard key={item.id} item={item} />
-          ))}
-        </div>
+        {/* Grid Kartu Berita (Maksimal 4 Item Terbaru) / State Kosong */}
+        {beritaList.length === 0 ? (
+          <div className="text-center py-16 sm:py-20 bg-marble/50 rounded-2xl border border-ash/20 mt-6 sm:mt-10">
+            <p className="font-lambo text-sm sm:text-base text-steel uppercase tracking-wider font-bold">
+              BELUM ADA BERITA YANG DITERBITKAN.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 pt-5 sm:pt-10">
+            {beritaList.slice(0, 4).map((item) => (
+              <BeritaCard key={item.id} item={item} />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Seksi 3: Wisata Dalisodo (Grid 4 Kolom Destinasi Populer) */}

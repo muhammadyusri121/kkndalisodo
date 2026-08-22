@@ -124,19 +124,20 @@ function renderRichNode(node: any, index: number): React.ReactNode {
       }
 
       // Render gambar:
-      // - Mobile  : lebar mengikuti ukuran alami gambar (tidak dipaksakan penuh)
-      // - Desktop : dibatasi max 560px dan di-tengah agar tidak terlalu lebar
+      // - Full width dengan potongan tipis (scale 1.02 - 1.03 overflow-hidden) sekadar menyembunyikan garis tepi kasar.
       return (
-        <figure key={index} className="my-6 flex justify-center">
-          <Image
-            src={resolvedUrl}
-            alt={assetTitle || "Gambar Berita"}
-            width={1200}
-            height={675}
-            sizes="(max-width: 640px) 100vw, 560px"
-            style={{ width: "100%", height: "auto", maxWidth: "560px" }}
-            className="rounded-xl"
-          />
+        <figure key={index} className="not-prose my-8 sm:my-10 w-full max-w-full">
+          <div className="relative w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-carbony/5 shadow-md transition-all duration-300 hover:shadow-lg">
+            <Image
+              src={resolvedUrl}
+              alt={assetTitle || "Gambar Dalisodo"}
+              width={1200}
+              height={675}
+              sizes="(max-width: 1200px) 100vw, 1200px"
+              style={{ width: "100%", height: "auto", maxWidth: "100%" }}
+              className="rounded-2xl block mx-auto object-cover max-h-[750px] scale-[1.02] sm:scale-[1.03] origin-center transition-transform duration-500 hover:scale-[1.05]"
+            />
+          </div>
         </figure>
       );
     }
